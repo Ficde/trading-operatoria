@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espacio de Repaso - MOD Trading Operatoria</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --ficde-azul-dark: #134252;
+            --ficde-azul-light: #2c5c6e;
+            --ficde-naranja: #e68161;
+            --ficde-naranja-hover: #ff9f85;
+            --tarjeta-bg: #f0f4f5;
+            --input-bg: #e2e8eb;
+            --texto-principal: #0f2d38;
+            --texto-secundario: #4a636e;
+            --verde-exito: #2e7d32;
+            --verde-bg: #c8e6c9;
+            --rojo-error: #c62828;
+            --naranja-bg: #ffe0b2;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, var(--ficde-azul-dark) 0%, #0a252e 100%);
+            min-height: 100vh;
+            color: var(--texto-principal);
+            padding: 20px;
+            background-attachment: fixed;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            border-radius: 16px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo-img { height: 50px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3)); }
+
+        .module-tag {
+            background: var(--ficde-naranja);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .welcome-card {
+            background: var(--tarjeta-bg);
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+            border-bottom: 6px solid var(--ficde-naranja);
+            margin-bottom: 30px;
+        }
+
+        .welcome-title {
+            color: var(--ficde-azul-dark);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            font-weight: 800;
+        }
+
+        .fede-avatar-large {
+            width: 140px; height: 140px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            background: var(--ficde-naranja);
+            padding: 5px;
+            box-shadow: 0 10px 25px rgba(230, 129, 97, 0.5);
+            cursor: pointer;
+            transition: transform 0.3s;
+            overflow: hidden;
+        }
+
+        .fede-avatar-large:hover { transform: scale(1.1); }
+
+        .fede-avatar-large img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            border: 4px solid white;
+        }
+
+        .blocks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 20px;
+        }
+
+        .block-card {
+            background: var(--tarjeta-bg);
+            padding: 30px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .block-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--ficde-naranja);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .block-icon {
+            font-size: 3rem; margin-bottom: 15px;
+            background: rgba(19, 66, 82, 0.1);
+            width: 70px; height: 70px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; color: var(--ficde-azul-dark);
+        }
+
+        .block-title { color: var(--ficde-azul-dark); font-size: 1.3rem; font-weight: 700; margin-bottom: 10px; }
+
+        .block-desc { color: var(--texto-secundario); font-size: 0.9rem; line-height: 1.5; }
+
+        .activity-screen {
+            display: none;
+            grid-template-columns: 280px 1fr;
+            gap: 25px;
+            align-items: start;
+        }
+
+        .activity-screen.active { display: grid; }
+
+        .tutor-sidebar {
+            background: var(--ficde-azul-light);
+            padding: 30px;
+            border-radius: 16px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            position: sticky; top: 20px;
+        }
+
+        .tutor-bubble {
+            background: rgba(255,255,255,0.95);
+            padding: 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            color: var(--ficde-azul-dark);
+            margin-top: 20px;
+            position: relative;
+            text-align: left;
+        }
+
+        .tutor-bubble::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            border-width: 0 10px 10px;
+            border-style: solid;
+            border-color: transparent transparent rgba(255,255,255,0.95);
+            transform: translateX(-50%);
+        }
+
+        .activity-content {
+            background: var(--tarjeta-bg);
+            padding: 40px;
+            border-radius: 16px;
+            min-height: 500px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .act-badge {
+            background: var(--ficde-naranja);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .act-title { font-size: 1.8rem; color: var(--ficde-azul-dark); margin: 15px 0; font-weight: 800; }
+
+        .act-instruction { font-size: 1.1rem; color: var(--texto-secundario); margin-bottom: 30px; }
+
+        .student-input {
+            width: 100%;
+            height: 150px;
+            padding: 20px;
+            background: var(--input-bg);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            color: var(--ficde-azul-dark);
+            transition: all 0.3s;
+        }
+
+        .student-input:focus { background: white; border-color: var(--ficde-naranja); outline: none; }
+
+        .fill-input {
+            border: none;
+            border-bottom: 2px solid var(--ficde-naranja);
+            background: transparent;
+            font-weight: 700;
+            color: var(--ficde-azul-dark);
+            text-align: center;
+            width: 150px;
+            font-size: 1.1rem;
+        }
+
+        .btn-action {
+            width: 100%;
+            padding: 18px;
+            margin-top: 30px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            cursor: pointer;
+            background: linear-gradient(90deg, var(--ficde-naranja), #ff9f85);
+            color: white;
+            box-shadow: 0 6px 20px rgba(230, 129, 97, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-action:hover { transform: translateY(-3px); }
+
+        .btn-back {
+            background: transparent;
+            color: var(--texto-secundario);
+            box-shadow: none;
+            border: 2px solid #ccc;
+            margin-top: 15px;
+        }
+
+        .btn-back:hover { background: #e0e0e0; color: var(--ficde-azul-dark); }
+
+        .traffic-row, .checklist-item {
+            background: white;
+            margin-bottom: 12px;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .traffic-row:hover, .checklist-item:hover { border-color: var(--ficde-naranja); transform: translateX(5px); }
+
+        .traffic-btn {
+            width: 35px; height: 35px;
+            border-radius: 50%; border: 2px solid #ddd;
+            cursor: pointer;
+            opacity: 0.3;
+        }
+
+        .traffic-btn.active { opacity: 1; transform: scale(1.2); border-color: var(--ficde-azul-dark); }
+
+        .bg-green { background: #4CAF50; }
+
+        .bg-yellow { background: #FFC107; }
+
+        .bg-red { background: #f44336; }
+
+        .check-box {
+            width: 24px; height: 24px;
+            border: 2px solid #ccc;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+
+        .checklist-item.selected { border-color: var(--ficde-naranja); background: #fff5f0; }
+
+        .checklist-item.selected .check-box { background: var(--ficde-naranja); border-color: var(--ficde-naranja); color: white; }
+
+        .feedback-area {
+            margin-top: 30px;
+            padding: 25px;
+            border-radius: 12px;
+            display: none;
+            animation: slideUp 0.4s;
+        }
+
+        .feedback-success { background: var(--verde-bg); color: #1b5e20; border-left: 6px solid var(--verde-exito); }
+
+        .feedback-retry { background: var(--naranja-bg); color: #bf360c; border-left: 6px solid #ef6c00; }
+
+        .feedback-fail { background: #cfd8dc; color: #37474f; border-left: 6px solid #455a64; }
+
+        #musicToggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--ficde-naranja);
+            color: white;
+            border: none;
+            cursor: pointer;
+            z-index: 100;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .activity-screen { grid-template-columns: 1fr; }
+            .tutor-sidebar { display: flex; align-items: center; gap: 20px; }
+            .fede-avatar-large { width: 80px; height: 80px; }
+            .tutor-bubble::after { display: none; }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- AUDIOS MP3 -->
+    <audio id="bgMusic" loop preload="auto">
+        <source src="chill-study-desk-focus-concentration-lofi-451180.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="saludoInicial" preload="auto" src="saludoinicial.mp3"></audio>
+    <audio id="mensaje1Ejercicios" preload="auto" src="mensaje1ejercicios.mp3"></audio>
+    <audio id="mensaje2Ejercicios" preload="auto" src="mensaje2ejercicios.mp3"></audio>
+    <audio id="mensaje3Ejercicios" preload="auto" src="mensaje3ejercicios.mp3"></audio>
+    <audio id="mensaje4Ejercicios" preload="auto" src="mensaje4ejercicios.mp3"></audio>
+    <audio id="respuestaCorrecta" preload="auto" src="respuestacorrecta.mp3"></audio>
+    <audio id="primerError" preload="auto" src="primererror.mp3"></audio>
+    <audio id="segundoError" preload="auto" src="segundoerror.mp3"></audio>
+    <audio id="loLograste" preload="auto" src="lolograste.mp3"></audio>
+
+    <audio id="hoverSound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2571/2571-preview.m4a"></audio>
+    <audio id="clickSound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.m4a"></audio>
+    <audio id="successSound" preload="auto" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.m4a"></audio>
+
+    <button id="musicToggle" onclick="toggleMusic()">🔇</button>
+
+    <div class="container">
+        <header>
+            <div class="logo-container">
+                <img src="logo.png" alt="FICDE" class="logo-img" onerror="this.style.display='none'; document.getElementById('altLogo').style.display='block'">
+                <h2 id="altLogo" style="display:none; color:white; font-weight:800;">FICDE</h2>
+            </div>
+            <div class="module-tag">Módulo: Trading Operatoria</div>
+        </header>
+
+        <div id="selectionScreen">
+            <div class="welcome-card">
+                <div class="fede-avatar-large" onclick="playAudio('saludoInicial')">
+                    <img src="personaje.gif" alt="Fede">
+                </div>
+                <h1 class="welcome-title">Espacio de Repaso Interactivo</h1>
+                <p style="color: var(--texto-secundario); font-size: 1.1rem;">Donde el conocimiento se convierte en acción</p>
+            </div>
+
+            <div class="blocks-grid">
+                <div class="block-card" onclick="startModule('sintesis')">
+                    <div class="block-icon">🧠</div>
+                    <div class="block-title">Síntesis</div>
+                    <div class="block-desc">Conceptos centrales de acción del precio, velas japonesas, soportes, resistencias, volumen y fractalidad.</div>
+                </div>
+
+                <div class="block-card" onclick="startModule('analisis')">
+                    <div class="block-icon">🔍</div>
+                    <div class="block-title">Análisis Crítico</div>
+                    <div class="block-desc">Evaluación profunda de apalancamiento, margen, stop loss, take profit, órdenes y noticias fundamentales.</div>
+                </div>
+
+                <div class="block-card" onclick="startModule('escenarios')">
+                    <div class="block-icon">🎬</div>
+                    <div class="block-title">Escenarios</div>
+                    <div class="block-desc">Aplicación contextual de órdenes, margen, stop loss, take profit, volatilidad y fractalidad.</div>
+                </div>
+
+                <div class="block-card" onclick="startModule('practica')">
+                    <div class="block-icon">⚡</div>
+                    <div class="block-title">Práctica</div>
+                    <div class="block-desc">Aplicación operativa concreta de órdenes, apalancamiento, stop, take profit y análisis.</div>
+                </div>
+            </div>
+        </div>
+
+        <div id="activityScreen" class="activity-screen">
+            <div class="tutor-sidebar">
+                <div class="fede-avatar-large" style="width: 100px; height: 100px; border-color: var(--ficde-naranja);" onclick="replayTutorMessage()">
+                    <img src="personaje.gif" alt="Fede">
+                </div>
+                <div style="flex:1;">
+                    <h3 style="color:var(--ficde-naranja); margin-bottom:5px;">Tutor Fede</h3>
+                    <div class="tutor-bubble" id="tutorMessage"></div>
+                </div>
+            </div>
+
+            <div class="activity-content" id="activityContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // ===== GESTIÓN DE AUDIO MP3 =====
+        const audioFiles = {
+            saludoInicial: document.getElementById('saludoInicial'),
+            mensaje1: document.getElementById('mensaje1Ejercicios'),
+            mensaje2: document.getElementById('mensaje2Ejercicios'),
+            mensaje3: document.getElementById('mensaje3Ejercicios'),
+            mensaje4: document.getElementById('mensaje4Ejercicios'),
+            correcto: document.getElementById('respuestaCorrecta'),
+            error1: document.getElementById('primerError'),
+            error2: document.getElementById('segundoError'),
+            lolograste: document.getElementById('loLograste')
+        };
+
+        function playAudio(audioKey) {
+            if (audioFiles[audioKey]) {
+                audioFiles[audioKey].currentTime = 0;
+                audioFiles[audioKey].play().catch(err => console.log('Error al reproducir audio:', err));
+            }
+        }
+
+        const bgMusic = document.getElementById('bgMusic');
+        const clickSoundEl = document.getElementById('clickSound');
+        const successSoundEl = document.getElementById('successSound');
+        const hoverSoundEl = document.getElementById('hoverSound');
+
+        let musicOn = false;
+        let audioUnlocked = false;
+
+        function unlockAudio() {
+            if (audioUnlocked) return;
+            Object.values(audioFiles).forEach(a => {
+                a.volume = 0;
+                const p = a.play();
+                if (p) p.then(() => { a.pause(); a.currentTime = 0; a.volume = 1; }).catch(()=>{});
+            });
+            audioUnlocked = true;
+        }
+
+        document.addEventListener('pointerdown', unlockAudio, { once: true });
+        document.addEventListener('keydown', unlockAudio, { once: true });
+
+        function toggleMusic() {
+            unlockAudio();
+            if (!musicOn) {
+                bgMusic.volume = 0.1;
+                bgMusic.play().catch(() => {});
+                document.getElementById('musicToggle').innerText = '🎵';
+            } else {
+                bgMusic.pause();
+                document.getElementById('musicToggle').innerText = '🔇';
+            }
+            musicOn = !musicOn;
+        }
+
+        function playSound(type) {
+            if (!audioUnlocked) return;
+            try {
+                if (type === 'click') { clickSoundEl.currentTime=0; clickSoundEl.volume=0.8; clickSoundEl.play().catch(()=>{}); }
+                if (type === 'success') { successSoundEl.currentTime=0; successSoundEl.volume=0.8; successSoundEl.play().catch(()=>{}); }
+                if (type === 'hover') { hoverSoundEl.currentTime=0; hoverSoundEl.volume=0.2; hoverSoundEl.play().catch(()=>{}); }
+            } catch (e) {}
+        }
+
+        function wireUiSounds() {
+            document.querySelectorAll('.block-card, .btn-action, .checklist-item, .traffic-row, .fede-avatar-large').forEach(el => {
+                if (el.dataset.sound === '1') return;
+                el.dataset.sound = '1';
+                el.addEventListener('mouseenter', () => playSound('hover'));
+                el.addEventListener('click', () => playSound('click'));
+            });
+        }
+
+        window.addEventListener('load', wireUiSounds);
+
+        // ===== NORMALIZACIÓN DE TEXTO =====
+        function normalizar(txt) {
+            return txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        }
+
+        // ===== ACTIVIDADES =====
+        const modules = {
+            sintesis: [
+                {
+                    type: 'text',
+                    badge: "Velas japonesas y estructura",
+                    title: "Información que aporta una vela",
+                    instruction: "¿Qué cuatro precios fundamentales muestra una vela japonesa dentro de una sesión?",
+                    tutor: "Son los extremos y los valores inicial y final.",
+                    explanation: "Una vela muestra precio de apertura, cierre, máximo y mínimo de la sesión.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["apertu", "cierre", "maximo", "minimo", "vela", "muestr", "precio", "sesion", "cuatro", "fundam"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'text',
+                    badge: "Vela alcista y bajista",
+                    title: "Diferencia estructural",
+                    instruction: "Explica cuándo una vela es alcista y cuándo es bajista según apertura y cierre.",
+                    tutor: "Compara qué precio es mayor.",
+                    explanation: "Es alcista si apertura es menor que cierre y bajista si apertura es mayor que cierre.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["apertu", "cierre", "alcist", "bajist", "menor", "mayor", "explic", "vela", "segun", "terap"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Componentes de la vela",
+                    title: "Cuerpo y sombras",
+                    instruction: "Selecciona los elementos que componen una vela japonesa.",
+                    items: [
+                        { text: "Cuerpo", correct: true },
+                        { text: "Sombra superior", correct: true },
+                        { text: "Sombra inferior", correct: true },
+                        { text: "Indicador RSI", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "No todos los elementos son indicadores externos.",
+                    explanation: "Una vela se compone de cuerpo y sombras que reflejan máximo y mínimo."
+                },
+                {
+                    type: 'text',
+                    badge: "Acción del precio",
+                    title: "Objetivo operativo",
+                    instruction: "¿Qué busca reconocer el trader cuando opera mediante acción del precio?",
+                    tutor: "Intenta actuar junto a los creadores de mercado.",
+                    explanation: "Busca reconocer posiciones de profesionales mediante soportes y resistencias.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["profes", "posici", "soport", "resist", "busca", "recono", "median", "trader", "opera", "accion"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'blanks',
+                    anyOrder: false,
+                    badge: "Soportes y resistencias",
+                    title: "Zonas relevantes",
+                    instruction: "Completar la frase<br><br>Reconocer ________ y ____________ importantes otorga ventaja en el análisis del precio.",
+                    blanks: ["soportes", "resistencias"],
+                    tutor: "Son niveles donde el precio suele reaccionar.",
+                    explanation: "Identificar soportes y resistencias permite anticipar posibles giros del precio."
+                },
+                {
+                    type: 'text',
+                    badge: "Volumen",
+                    title: "Significado en el mercado",
+                    instruction: "¿Qué representa el volumen dentro del trading?",
+                    tutor: "Mide cuánto se negocia.",
+                    explanation: "El volumen mide cantidad negociada y refleja actividad y liquidez del mercado.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["cantid", "activi", "liquid", "mercad", "volume", "mide", "negoci", "reflej", "repres", "dentro"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Volatilidad",
+                    title: "Características",
+                    instruction: "Selecciona afirmaciones correctas sobre volatilidad.",
+                    items: [
+                        { text: "Indica probabilidad de movimientos grandes", correct: true },
+                        { text: "Mercado volátil presenta movimientos bruscos", correct: true },
+                        { text: "Elimina el riesgo operativo", correct: false },
+                        { text: "Puede producir grandes pérdidas", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Está asociada al riesgo.",
+                    explanation: "La volatilidad refleja magnitud de movimientos y aumento del riesgo."
+                },
+                {
+                    type: 'text',
+                    badge: "Fractalidad",
+                    title: "Repetición estructural",
+                    instruction: "¿Qué implica que el mercado sea fractal en distintas escalas temporales?",
+                    tutor: "Lo que funciona en diario debería funcionar en minuto.",
+                    explanation: "Implica que patrones y estructuras se repiten en distintas escalas temporales.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["escala", "patron", "repeti", "tempor", "implic", "estruc", "repite", "distin", "mercad", "fracta"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Acción del precio",
+                    title: "Proceso previo",
+                    instruction: "Marca afirmaciones correctas sobre el proceso de análisis previo",
+                    items: [
+                        { text: "Se deben identificar soportes y resistencias", color: "green" },
+                        { text: "La paciencia es irrelevante en trading", color: "red" },
+                        { text: "Existen falsas rupturas y manipulaciones", color: "green" },
+                        { text: "No es necesario gestionar el riesgo", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La gestión del riesgo es el último paso del proceso.",
+                    explanation: "El análisis requiere identificar zonas, observar precio y gestionar riesgo."
+                },
+                {
+                    type: 'text',
+                    badge: "Gestión del riesgo",
+                    title: "Paso final",
+                    instruction: "¿Por qué gestionar el riesgo es esencial después de identificar una oportunidad?",
+                    tutor: "Sin control no hay sostenibilidad.",
+                    explanation: "Permite controlar pérdida potencial y proteger capital en cada posición.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["riesgo", "posici", "perdid", "contro", "permit", "potenc", "proteg", "capita", "gestio", "esenci"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                }
+            ],
+            analisis: [
+                {
+                    type: 'text',
+                    badge: "Apalancamiento financiero",
+                    title: "Implicancias",
+                    instruction: "¿Qué significa operar con apalancamiento en términos de capital y riesgo?",
+                    tutor: "Permite operar con más dinero del disponible.",
+                    explanation: "Implica usar capital prestado mediante un multiplicador aumentando exposición y riesgo.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["capita", "presta", "multip", "margen", "riesgo", "implic", "usar", "median", "aument", "exposi"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'text',
+                    badge: "Margen",
+                    title: "Función en la cuenta",
+                    instruction: "Explica qué es el margen dentro de una operación apalancada.",
+                    tutor: "Es el dinero que se inmoviliza.",
+                    explanation: "Es el dinero de la cuenta utilizado para sostener una operación apalancada.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["margen", "dinero", "operac", "cuenta", "utiliz", "sosten", "apalan", "explic", "dentro", "terap"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Tipos de margen",
+                    title: "Clasificación",
+                    instruction: "Selecciona tipos de margen mencionados.",
+                    items: [
+                        { text: "Saldo de cuenta", correct: true },
+                        { text: "Margen utilizado", correct: true },
+                        { text: "Margen utilizable", correct: true },
+                        { text: "Interés hipotecario", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Son categorías internas de la cuenta de trading.",
+                    explanation: "El margen incluye saldo total, margen utilizado y margen disponible."
+                },
+                {
+                    type: 'text',
+                    badge: "Stop Loss",
+                    title: "Función real",
+                    instruction: "¿Qué efecto tiene el Stop Loss cuando el precio alcanza el nivel definido?",
+                    tutor: "No evita perder, pero limita.",
+                    explanation: "Activa venta automática limitando pérdida al nivel previamente definido.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["perdid", "salida", "limite", "venta", "activa", "automa", "limita", "nivel", "previa", "defini"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'blanks',
+                    anyOrder: false,
+                    badge: "Take Profit",
+                    title: "Objetivo",
+                    instruction: "Completar la frase<br><br>El Take Profit asegura _________ cuando el precio alcanza un nivel de _____ definido.",
+                    blanks: ["ganancias", "venta"],
+                    tutor: "Protege utilidades obtenidas.",
+                    explanation: "El Take Profit asegura ganancias al alcanzar un nivel objetivo de venta."
+                },
+                {
+                    type: 'text',
+                    badge: "Swap",
+                    title: "Costo por permanencia",
+                    instruction: "¿Qué es el swap y cuándo se aplica en una operación?",
+                    tutor: "Se paga por mantenerla abierta más de una sesión.",
+                    explanation: "Es una comisión o interés que cobra el bróker por mantener posición abierta.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["comisi", "intere", "posici", "abiert", "broker", "cobra", "manten", "swap", "aplica", "operac"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Tipos de órdenes",
+                    title: "Clasificación operativa",
+                    instruction: "Selecciona órdenes según tipo de ejecución.",
+                    items: [
+                        { text: "Orden a mercado", correct: true },
+                        { text: "Orden limitada", correct: true },
+                        { text: "Orden condicionada", correct: true },
+                        { text: "Orden contable", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Se relacionan con compra y venta de activos.",
+                    explanation: "Las órdenes pueden ser a mercado, limitadas o condicionadas según ejecución."
+                },
+                {
+                    type: 'text',
+                    badge: "Noticias fundamentales",
+                    title: "Impacto en el mercado",
+                    instruction: "¿Por qué se recomienda evitar operar 15 minutos antes y después de una noticia relevante?",
+                    tutor: "Genera movimientos bruscos.",
+                    explanation: "Porque aumentan volatilidad y riesgo con movimientos bruscos de precio.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["volati", "notici", "mercad", "riesgo", "aument", "movimi", "brusco", "precio", "recomi", "evitar"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Volatilidad",
+                    title: "Interpretación",
+                    instruction: "Marca afirmaciones correctas sobre volatilidad",
+                    items: [
+                        { text: "Alta volatilidad implica movimientos abruptos", color: "green" },
+                        { text: "Baja volatilidad significa grandes variaciones", color: "red" },
+                        { text: "Las criptomonedas suelen ser volátiles", color: "green" },
+                        { text: "La volatilidad elimina el riesgo", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Mayor volatilidad implica mayor riesgo operativo.",
+                    explanation: "La volatilidad mide intensidad de movimientos y nivel de riesgo."
+                },
+                {
+                    type: 'text',
+                    badge: "Análisis fundamental",
+                    title: "Complemento del técnico",
+                    instruction: "¿Cómo complementa el análisis fundamental al análisis técnico?",
+                    tutor: "Evalúa salud financiera.",
+                    explanation: "Evalúa valor real y salud financiera complementando tendencias del análisis técnico.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["balanc", "valor", "real", "mercad", "tenden", "evalua", "salud", "financ", "comple", "analis"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                }
+            ],
+            escenarios: [
+                {
+                    type: 'text',
+                    badge: "Orden a mercado",
+                    title: "Decisión inmediata",
+                    instruction: "Un trader necesita entrar con rapidez porque el precio está rompiendo una resistencia. ¿Qué tipo de orden debería usar y por qué?",
+                    tutor: "Se ejecuta al primer precio disponible.",
+                    explanation: "Debe usar orden a mercado porque se ejecuta al primer precio disponible con rapidez.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["mercad", "ejecuc", "precio", "dispon", "rapide", "debe", "usar", "orden", "ejecut", "primer"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Margin Call",
+                    title: "Consecuencias operativas",
+                    instruction: "Marca afirmaciones correctas sobre llamada de margen",
+                    items: [
+                        { text: "Ocurre cuando el margen no cubre posibles pérdidas", color: "green" },
+                        { text: "Garantiza que la operación será rentable", color: "red" },
+                        { text: "El bróker puede cerrar posiciones abiertas", color: "green" },
+                        { text: "No tiene relación con el apalancamiento", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La llamada de margen indica riesgo elevado por uso de apalancamiento.",
+                    explanation: "La margin call se produce cuando el margen es insuficiente y puede generar cierre forzado."
+                },
+                {
+                    type: 'text',
+                    badge: "Stop Loss",
+                    title: "Protección ante caída",
+                    instruction: "Un inversor compra acciones y el precio comienza a caer. ¿Cómo actúa el stop loss en esta situación?",
+                    tutor: "Se activa al tocar el nivel definido.",
+                    explanation: "El stop loss activa salida automática limitando pérdida al nivel fijado.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["perdid", "salida", "automa", "limite", "precio", "stop", "loss", "activa", "limita", "nivel"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Orden limitada",
+                    title: "Aplicación estratégica",
+                    instruction: "Selecciona características correctas de una orden limitada",
+                    items: [
+                        { text: "Fija un precio específico", correct: true },
+                        { text: "Depende de oferta y demanda", correct: true },
+                        { text: "Se ejecuta siempre de inmediato", correct: false },
+                        { text: "Puede ejecutarse a mejor precio", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "No garantiza ejecución instantánea.",
+                    explanation: "La orden limitada fija precio y depende del mercado para ejecutarse."
+                },
+                {
+                    type: 'text',
+                    badge: "Volatilidad alta",
+                    title: "Impacto emocional",
+                    instruction: "El mercado presenta movimientos bruscos e imprevisibles. ¿Cómo se define esta situación y qué riesgo implica?",
+                    tutor: "Grandes variaciones de precio.",
+                    explanation: "Se trata de alta volatilidad que implica mayor riesgo y posibles pérdidas.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["volati", "movimi", "brusco", "riesgo", "trata", "alta", "implic", "mayor", "posibl", "perdid"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Volumen",
+                    title: "Interpretación operativa",
+                    instruction: "Marca afirmaciones correctas sobre volumen",
+                    items: [
+                        { text: "Mide cantidad negociada en un período", color: "green" },
+                        { text: "Mayor volumen implica mayor actividad", color: "green" },
+                        { text: "Es independiente de la liquidez", color: "red" },
+                        { text: "Puede disminuir en mercados OTC", color: "green" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "El volumen refleja actividad y liquidez del mercado.",
+                    explanation: "El volumen indica nivel de negociación y participación del mercado."
+                },
+                {
+                    type: 'text',
+                    badge: "Noticias fundamentales",
+                    title: "Precaución operativa",
+                    instruction: "Se anuncia una suba de tasas de interés. ¿Por qué podría alterarse el precio del activo?",
+                    tutor: "Las noticias influyen en la cotización.",
+                    explanation: "Porque las noticias fundamentales generan volatilidad y afectan precio del mercado.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["notici", "mercad", "volati", "precio", "fundam", "genera", "afecta", "anunci", "suba", "tasas"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Fractalidad",
+                    title: "Aplicación estratégica",
+                    instruction: "Selecciona afirmaciones correctas sobre fractalidad",
+                    items: [
+                        { text: "Los patrones se repiten en distintas escalas", correct: true },
+                        { text: "Una estrategia puede funcionar en diario y minuto", correct: true },
+                        { text: "Elimina la necesidad de análisis", correct: false },
+                        { text: "Se basa en repetición estructural", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Mercado replica estructuras en múltiples temporalidades.",
+                    explanation: "La fractalidad implica repetición de patrones en distintas escalas."
+                },
+                {
+                    type: 'text',
+                    badge: "Gestión del riesgo",
+                    title: "Disciplina operativa",
+                    instruction: "¿Por qué es fundamental gestionar el riesgo luego de identificar una oportunidad?",
+                    tutor: "Sin control no hay sostenibilidad.",
+                    explanation: "Porque permite controlar pérdida potencial y proteger capital en cada posición.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["riesgo", "perdid", "contro", "posici", "permit", "potenc", "proteg", "capita", "fundam", "gestio"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Acción del precio",
+                    title: "Secuencia correcta",
+                    instruction: "Marca afirmaciones correctas sobre el proceso operativo",
+                    items: [
+                        { text: "Se deben identificar zonas relevantes antes de operar", color: "green" },
+                        { text: "La paciencia no influye en el resultado", color: "red" },
+                        { text: "Existen falsas rupturas en el mercado", color: "green" },
+                        { text: "Gestionar el riesgo es opcional", color: "red" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "El proceso requiere análisis previo y disciplina.",
+                    explanation: "La acción del precio exige identificar zonas, observar comportamiento y gestionar riesgo."
+                }
+            ],
+            practica: [
+                {
+                    type: 'checklist',
+                    badge: "Tipos de órdenes",
+                    title: "Clasificación por duración",
+                    instruction: "Selecciona tipos de órdenes según duración",
+                    items: [
+                        { text: "Intradia", correct: true },
+                        { text: "Minute", correct: true },
+                        { text: "Muy largo plazo", correct: true },
+                        { text: "Contable", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Se diferencian por tiempo activo en mercado.",
+                    explanation: "Las órdenes pueden clasificarse según su duración temporal."
+                },
+                {
+                    type: 'text',
+                    badge: "Orden condicionada",
+                    title: "Activación",
+                    instruction: "¿Cuándo se ejecuta una orden condicionada o pendiente?",
+                    tutor: "Solo cuando toca el nivel definido.",
+                    explanation: "Se ejecuta cuando el precio alcanza el valor estipulado previamente.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["precio", "valor", "estipu", "ejecuc", "condic", "ejecut", "alcanz", "previa", "orden", "pendie"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'blanks',
+                    anyOrder: false,
+                    badge: "Apalancamiento",
+                    title: "Cálculo operativo",
+                    instruction: "Completar la frase<br><br>Si invierto 10 USD con multiplicador 50, el monto total de la operación será _____ USD.",
+                    blanks: ["500"],
+                    tutor: "Multiplica monto por apalancamiento.",
+                    explanation: "Con multiplicador 50, 10 USD se transforman en 500 USD de operación."
+                },
+                {
+                    type: 'traffic',
+                    badge: "Take Profit",
+                    title: "Protección de ganancias",
+                    instruction: "Marca afirmaciones correctas sobre take profit",
+                    items: [
+                        { text: "Se activa al alcanzar un nivel de precio superior definido", color: "green" },
+                        { text: "Busca asegurar ganancias obtenidas", color: "green" },
+                        { text: "Elimina totalmente el riesgo", color: "red" },
+                        { text: "Depende del comportamiento del mercado", color: "green" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "El take profit protege utilidades alcanzadas.",
+                    explanation: "El take profit asegura ganancias cuando el precio alcanza el objetivo fijado."
+                },
+                {
+                    type: 'text',
+                    badge: "Stop dinámico",
+                    title: "Adaptación al precio",
+                    instruction: "¿Cómo funciona un stop dinámico en relación con la evolución del precio?",
+                    tutor: "Se mueve automáticamente.",
+                    explanation: "El stop dinámico sigue la evolución del precio manteniendo distancia definida.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["stop", "dinami", "evoluc", "precio", "distan", "sigue", "manten", "defini", "funcio", "relaci"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Análisis fundamental",
+                    title: "Elementos evaluados",
+                    instruction: "Selecciona factores del análisis fundamental",
+                    items: [
+                        { text: "Balances", correct: true },
+                        { text: "Ganancias por acción", correct: true },
+                        { text: "Relación precio/ganancias", correct: true },
+                        { text: "Color del gráfico", correct: false }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "Evalúa salud financiera del activo.",
+                    explanation: "El análisis fundamental revisa balances y métricas financieras."
+                },
+                {
+                    type: 'text',
+                    badge: "Swap",
+                    title: "Costo por permanencia",
+                    instruction: "¿Qué ocurre si mantienes una posición abierta más de una sesión?",
+                    tutor: "Se aplica cada 24 horas.",
+                    explanation: "Se aplica un swap como comisión o interés por mantener posición abierta.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["swap", "comisi", "intere", "posici", "abiert", "aplica", "manten", "ocurre", "mantie", "sesion"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'traffic',
+                    badge: "Volatilidad",
+                    title: "Identificación práctica",
+                    instruction: "Marca afirmaciones correctas sobre volatilidad",
+                    items: [
+                        { text: "Alta volatilidad implica movimientos grandes", color: "green" },
+                        { text: "Baja volatilidad implica estabilidad relativa", color: "green" },
+                        { text: "Volatilidad elimina riesgo operativo", color: "red" },
+                        { text: "Puede generar grandes dolores de cabeza al operador", color: "green" }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La volatilidad aumenta el nivel de riesgo.",
+                    explanation: "Mayor volatilidad implica mayores variaciones de precio y riesgo operativo."
+                },
+                {
+                    type: 'text',
+                    badge: "Estrategia técnica",
+                    title: "Aplicación en temporalidades",
+                    instruction: "¿Por qué una estrategia técnica probada debería funcionar en distintas escalas temporales?",
+                    tutor: "El mercado replica patrones.",
+                    explanation: "Porque la fractalidad implica repetición estructural en distintas escalas.",
+                    validation: (raw) => {
+                        const v = normalizar(raw);
+                        const roots = ["fracta", "escala", "repeti", "estruc", "implic", "distin", "estrat", "tecnic", "probad", "deberi"];
+                        return roots.filter(r => v.includes(r)).length >= 2;
+                    }
+                },
+                {
+                    type: 'checklist',
+                    badge: "Operatoria integral",
+                    title: "Secuencia completa",
+                    instruction: "Selecciona pasos correctos antes de abrir una posición",
+                    items: [
+                        { text: "Identificar soportes y resistencias", correct: true },
+                        { text: "Evaluar volatilidad", correct: true },
+                        { text: "Ignorar noticias relevantes", correct: false },
+                        { text: "Definir stop loss y take profit", correct: true }
+                    ].sort(() => Math.random() - 0.5),
+                    tutor: "La planificación reduce riesgo.",
+                    explanation: "Una operatoria correcta requiere análisis previo y gestión del riesgo."
+                }
+            ]
+        };
+
+let currentModule = '';
+        let currentIndex = 0;
+        let attemptCount = 0;
+        let lastAudioModule = null;
+
+        // ===== MAPEO DE MÓDULOS A AUDIOS =====
+        const moduloAudioMap = {
+            'sintesis': 'mensaje1',
+            'analisis': 'mensaje2',
+            'escenarios': 'mensaje3',
+            'practica': 'mensaje4'
+        };
+
+        function startModule(id) {
+            playSound('click');
+            currentModule = id;
+            currentIndex = 0;
+            attemptCount = 0;
+            lastAudioModule = id;
+
+            // Reproducir el audio del módulo correspondiente
+            const audioKey = moduloAudioMap[id];
+            if (audioKey) {
+                playAudio(audioKey);
+            }
+
+            document.getElementById('selectionScreen').style.display = 'none';
+            document.getElementById('activityScreen').classList.add('active');
+
+            setTimeout(loadActivity, 300);
+        }
+
+        function loadActivity() {
+            attemptCount = 0;
+
+            if (currentIndex >= modules[currentModule].length) {
+                // Reproducir "lolograste.mp3" al terminar TODAS las preguntas
+                playAudio('lolograste');
+                playSound('success');
+                alert('¡Excelente! Completaste este bloque.');
+                setTimeout(() => {
+                    location.reload();
+                }, 2000);
+                return;
+            }
+
+            const data = modules[currentModule][currentIndex];
+            const container = document.getElementById('activityContainer');
+
+            const msg = `Pregunta ${currentIndex + 1} de ${modules[currentModule].length}: ${data.tutor}`;
+            document.getElementById('tutorMessage').innerText = msg;
+
+            let html = `<span class="act-badge">${data.badge}</span>
+                        <h2 class="act-title">${data.title}</h2>
+                        <p class="act-instruction">${data.instruction}</p>`;
+
+            if (data.type === 'text') {
+                html += `<textarea id="txtInput" class="student-input" placeholder="Escribe tu respuesta con tus palabras..."></textarea>`;
+            } else if (data.type === 'blanks') {
+                html += `<div style="font-size:1.2rem; line-height:2.5;">`;
+                data.blanks.forEach((b, i) => {
+                    html += `${i + 1}. <input type="text" class="fill-input" data-ans="${b}"> <br>`;
+                });
+                html += `</div>`;
+            } else if (data.type === 'traffic') {
+                data.items.forEach((item, i) => {
+                    html += `<div class="traffic-row" id="row-${i}">
+                                <span>${item.text}</span>
+                                <div style="display:flex; gap:10px;">
+                                    <div class="traffic-btn bg-green" onclick="selTraffic(${i}, 'green')"></div>
+                                    <div class="traffic-btn bg-yellow" onclick="selTraffic(${i}, 'yellow')"></div>
+                                    <div class="traffic-btn bg-red" onclick="selTraffic(${i}, 'red')"></div>
+                                </div>
+                            </div>`;
+                });
+            } else if (data.type === 'checklist') {
+                data.items.forEach((item) => {
+                    html += `<div class="checklist-item" onclick="toggleCheck(this)" data-correct="${item.correct}">
+                                <div class="check-box"></div>
+                                <span>${item.text}</span>
+                            </div>`;
+                });
+            }
+
+            html += `<div id="feedback" class="feedback-area"></div>
+                     <button id="btnCheck" class="btn-action" onclick="validate()">Verificar respuesta</button>
+                     <button class="btn-action btn-back" onclick="location.reload()">Salir al menú</button>`;
+
+            container.innerHTML = html;
+            wireUiSounds();
+        }
+
+        let trafficAns = {};
+
+        function selTraffic(idx, color) {
+            trafficAns[idx] = color;
+            const row = document.getElementById(`row-${idx}`);
+            row.querySelectorAll('.traffic-btn').forEach(b => b.classList.remove('active'));
+            row.querySelector(`.bg-${color}`).classList.add('active');
+            playSound('click');
+        }
+
+        function toggleCheck(el) {
+            el.classList.toggle('selected');
+            el.querySelector('.check-box').innerText = el.classList.contains('selected') ? '✓' : '';
+
+            if (el.classList.contains('selected')) {
+                el.style.borderColor = 'var(--ficde-naranja)';
+                el.querySelector('.check-box').style.background = 'var(--ficde-naranja)';
+                el.querySelector('.check-box').style.borderColor = 'var(--ficde-naranja)';
+                el.querySelector('.check-box').style.color = 'white';
+            } else {
+                el.style.borderColor = 'transparent';
+                el.querySelector('.check-box').style.background = 'transparent';
+                el.querySelector('.check-box').style.borderColor = '#ccc';
+            }
+
+            playSound('click');
+        }
+
+        function validate() {
+            const data = modules[currentModule][currentIndex];
+            const feedback = document.getElementById('feedback');
+            let isCorrect = false;
+
+            if (data.type === 'text') {
+                const val = document.getElementById('txtInput').value;
+                isCorrect = data.validation(val);
+            } else if (data.type === 'blanks') {
+                const inputs = document.querySelectorAll('.fill-input');
+                let hits = 0;
+                inputs.forEach(inp => {
+                    const v = normalizar(inp.value.trim());
+                    const ans = normalizar(inp.dataset.ans.trim());
+                    // Lógica corregida para aceptar respuestas de 1 carácter exacto o coincidencias parciales en palabras largas
+                    if (v.length > 0 && (ans === v || (v.length > 1 && ans.startsWith(v.slice(0, Math.max(2, Math.min(v.length, ans.length))))))) {
+                        hits++;
+                    }
+                });
+                isCorrect = (hits === data.blanks.length);
+            } else if (data.type === 'traffic') {
+                let hits = 0;
+                data.items.forEach((item, i) => { if (trafficAns[i] === item.color) hits++; });
+                isCorrect = (hits === data.items.length);
+            } else if (data.type === 'checklist') {
+                let correct = true;
+                document.querySelectorAll('.checklist-item').forEach(item => {
+                    const sel = item.classList.contains('selected');
+                    const should = item.dataset.correct === 'true';
+                    if (sel !== should) correct = false;
+                });
+                isCorrect = correct;
+            }
+
+            feedback.style.display = 'block';
+
+            if (isCorrect) {
+                playAudio('correcto');
+                playSound('success');
+                feedback.className = 'feedback-area feedback-success';
+                feedback.innerHTML = `<strong>¡Muy bien!</strong><br>${data.explanation}`;
+                document.getElementById('btnCheck').innerText = 'Siguiente pregunta →';
+                document.getElementById('btnCheck').onclick = () => { currentIndex++; loadActivity(); };
+            } else {
+                attemptCount++;
+
+                if (attemptCount < 2) {
+                    playAudio('error1');
+                    feedback.className = 'feedback-area feedback-retry';
+                    feedback.innerHTML = `<strong>Buen intento.</strong> Revisá tu respuesta. Pista: ${data.tutor}`;
+                } else {
+                    playAudio('error2');
+                    feedback.className = 'feedback-area feedback-fail';
+                    feedback.innerHTML = `<strong>No pasa nada, aprendamos juntos:</strong><br>${data.explanation}`;
+                    document.getElementById('btnCheck').innerText = 'Entendido, continuar →';
+                    document.getElementById('btnCheck').onclick = () => { currentIndex++; loadActivity(); };
+                }
+            }
+        }
+
+        function replayTutorMessage() {
+            // Replay del último audio de módulo reproducido
+            if (lastAudioModule) {
+                const audioKey = moduloAudioMap[lastAudioModule];
+                if (audioKey) {
+                    playAudio(audioKey);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
